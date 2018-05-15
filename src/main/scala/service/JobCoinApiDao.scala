@@ -48,33 +48,32 @@ class LocalJobCoinApiDao(private var sow: Map[Address, AddressInfo]) extends Job
   def SOW: Map[Address, AddressInfo] = sow
 }
 
-// TODO: add config for setting route
-class HttpJobCoinApiDao extends JobCoinApiDao {
-  private lazy val client: Service[Request, Response] = Http.newService("jobcoin.projecticeland.net:80")
+class HttpJobCoinApiDao(host: String, port: Int, uri: String) extends JobCoinApiDao {
+  private lazy val client: Service[Request, Response] = Http.newService(s"$host:$port")
 
   override def getAddressInfo(address: Address): AddressInfo = {
-    val request = http.Request(http.Method.Get, s"/unbountifulness/api/addresses/$address")
+    val request = http.Request(http.Method.Get, s"/$uri/api/addresses/$address")
 
-    request.host = "jobcoin.projecticeland.net"
-    decode[AddressInfo](Await.result(client(request)).getContentString()).right.get
+    request.host = host
+    val result = Await.result(client(request)).getContentString()
+    decode[AddressInfo](result).right.get
   }
 
   override def getTransactions: List[Transaction] = {
-    val request = http.Request(http.Method.Get, s"/unbountifulness/api/transactions")
-
-    request.host = "jobcoin.projecticeland.net"
+    val request = http.Request(http.Method.Get, s"/$uri/api/transactions")
+    request.host = host
 
     decode[List[Transaction]](Await.result(client(request)).getContentString()).right.get
   }
 
   override def sendJobCoins(form: SendJobCoinForm): SendJobCoinResponse = {
     val request = http.Request(http.Method.Post,
-      s"/unbountifulness/api/transactions" +
+      s"/$uri/api/transactions" +
         s"?fromAddress=${form.fromAddress}&amp" +
         s";toAddress=${form.toAddress}&amp" +
         s";amount=${form.amount.value.toString}")
+    request.host = host
 
-    request.host = "jobcoin.projecticeland.net"
     Await.result(client(request)).status.code match {
       case 200 => TransactionSuccess
       case 422 => InsufficientFunds

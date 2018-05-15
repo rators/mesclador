@@ -12,7 +12,6 @@ object Main extends App {
       |bootstrap.servers="localhost:9092"
       |topics=["obligations-test-topic"]
       |group.id=mixing
-      |obligations.topic="obligations-test-topic"
       |pending.minDelay=1
       |pending.maxDelay=4
     """.stripMargin)
@@ -21,14 +20,13 @@ object Main extends App {
     """
       |bootstrap.servers="localhost:9092"
       |topic="obligations-test-topic"
-
-      |obligations.topic="obligations-test-topic"
       |client.id="ObligationProducer"
+      |pollRate=5
     """.stripMargin)
 
   val sampleRegistryService = new LocalRegistrarService(TrieMap.empty)
 
-  val jobCoinApiDao = new HttpJobCoinApiDao
+  val jobCoinApiDao = new HttpJobCoinApiDao("jobcoin.projecticeland.net", 80, "unbountifulness")
 
   val houseAccountService = new SimpleHouseAccountService(jobCoinApiDao, "mixer")
 
@@ -37,7 +35,8 @@ object Main extends App {
                                                        houseAccountService,
                                                        jobCoinApiDao)
 
-  val splitService = ObligationSplitService(sampleRegistryService, houseAccountService)
+  val splitService = ObligationSplitService(sampleRegistryService,
+                                            houseAccountService)
 
   val actorSystem = ActorSystem("mixer-system")
 

@@ -10,6 +10,7 @@ import monix.execution.Cancelable
 import org.apache.kafka.common.serialization.StringDeserializer
 import service.{ObligationSplitService, TransactionSchedulerService}
 
+import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
 class ObligationConsumer(obligationSplitService: ObligationSplitService,
@@ -33,7 +34,7 @@ class KafkaObligationConsumer(config: Config,
   extends ObligationConsumer(obligationSplitService,
                              transactionSchedulerService,
                              config.getInt("pending.minDelay").seconds,
-                             config.getInt("pending.maxDelay").seconds) with Actor with ActorLogging {
+                             config.getInt("pending.maxDelay").seconds) with Actor {
 
   private val extractor = ConsumerRecords.extractor[String, Obligation]
 
@@ -46,13 +47,12 @@ class KafkaObligationConsumer(config: Config,
       ),
       actorConf = KafkaConsumerActor.Conf(1.seconds, 3.seconds),
       self
-    ), "ObligationConsumer")
+    ), "KafkaObligationConsumer")
 
   override def preStart(): Unit = {
-    val missingTopicEcxeption = new AssertionError(s"Consumer config missing obligations.topic property")
-    val inputTopics = Seq(config.toPropertyMap.getOrElse("obligations.topic", throw missingTopicEcxeption).toString)
+    val inputTopics = config.getStringList("topics")
     super.preStart()
-    kafkaConsumerActor ! Subscribe.AutoPartition(inputTopics)
+    kafkaConsumerActor ! Subscribe.AutoPartition(inputTopics.asScala)
   }
 
   override def postStop(): Unit = {

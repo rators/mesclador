@@ -1,26 +1,32 @@
 package service
 
-import model.{JobCoin, Obligation, PendingTransaction}
+import model.{Address, JobCoin, Obligation, PendingTransaction}
 
 import scala.util.Random
 
-// TODO: add config properties. i.e. parts split
 class ObligationSplitService(registrarService: RegistrarService,
-                             houseAccountService: HouseAccountService) {
+                             houseAccountService: HouseAccountService,
+                             splitN: Int = 5) {
+
+  if (splitN <= 0) throw InvalidPropertyError("splitN",
+                                              splitN,
+                                              "the number of partitions must be greater than or equal to 1")
 
   def splitObligation(obligation: Obligation): List[PendingTransaction] = {
-    // TODO remove get call and handle missing link
-    val outBoxes = registrarService.getOutBoxes(obligation.dropBox).get
-    val circular = Iterator.continually(Random.shuffle(outBoxes)).flatten
-    println(Random.shuffle(outBoxes))
-    split(obligation.debt, parts = 5).map(v => PendingTransaction(
+
+    val outBoxes = registrarService.getOutBoxes(obligation.dropBox)
+                   .getOrElse(throw UnregisteredDropBoxError(obligation.dropBox))
+
+    val circular = shuffleContinually(outBoxes)
+
+    split(obligation.debt, parts = splitN).map(v => PendingTransaction(
       fromAddress = houseAccountService.getHouseAccount,
       toAddress = circular.next,
       amount = JobCoin(v)
     ))
   }
 
-  private def split(coin: JobCoin, parts: Int): List[BigDecimal] = parts match {
+  private def split(coin: JobCoin, parts: Int) = parts match {
     case 1 => List(coin.value)
     case _ =>
       val maxPartitionSize = coin.value / parts
@@ -28,6 +34,9 @@ class ObligationSplitService(registrarService: RegistrarService,
       val tailPartition = coin.value - ranPartitions.sum
       ranPartitions :+ tailPartition
   }
+
+  private def shuffleContinually(outBoxes: Iterable[Address]) =
+    Iterator.continually(Random.shuffle(outBoxes)).flatten
 }
 
 object ObligationSplitService {

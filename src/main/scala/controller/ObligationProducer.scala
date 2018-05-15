@@ -11,6 +11,7 @@ import org.apache.kafka.common.serialization.StringSerializer
 import service.{HouseAccountService, JobCoinApiDao, RegistrarService}
 
 import scala.concurrent.duration._
+import scala.util.Try
 
 abstract class ObligationProducer(registrarService: RegistrarService,
                                   houseAccountService: HouseAccountService,
@@ -50,10 +51,8 @@ class KafkaObligationProducer(val config: Config,
     registrarService,
     houseAccountService,
     jobCoinApiDao,
-    config.toPropertyMap.get("pollRate").fold(5 seconds)(_.toString.toInt seconds)
+    Try(config.getInt("pollRate")).toOption.fold(5 seconds)(_.toString.toInt seconds)
   ) with LazyLogging {
-
-  private val configException = new NoSuchElementException(s"Missing obligation.topic property in obligation producer config")
 
   private val producer = KafkaProducer(
     KafkaProducer.Conf(
@@ -63,7 +62,7 @@ class KafkaObligationProducer(val config: Config,
 
   override def send(obligation: Obligation): Unit = {
     val record = KafkaProducerRecord[String, Obligation](
-        topic = config.toPropertyMap.getOrElse("obligations.topic", throw configException).toString,
+      topic = config.getString("topic"),
       key = Option(UUID.randomUUID.toString),
       value = obligation
     )
