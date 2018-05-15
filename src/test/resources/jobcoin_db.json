@@ -1,0 +1,34 @@
+{
+  "accounts": {
+    "meclador_house_account_primary": {
+      "balance": "0.01",
+      "transactions": [
+        {
+          "timestamp": "2014-04-22T13:10:01.210Z",
+          "toAddress": "meclador_house_account_primary",
+          "amount": "0.01"
+        }
+      ]
+    },
+    "bob_acc_a": {
+      "balance": "25",
+      "transactions": [
+        {
+          "timestamp": "2014-04-22T13:10:01.210Z",
+          "toAddress": "bob_acc_a",
+          "amount": "25"
+        }
+      ]
+    },
+    "bob_acc_b": {
+      "balance": "35",
+      "transactions": [
+        {
+          "timestamp": "2014-04-22T13:10:01.210Z",
+          "toAddress": "bob_acc_b",
+          "amount": "35"
+        }
+      ]
+    }
+  }
+}
