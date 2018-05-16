@@ -2,8 +2,6 @@ import model.{Address, AddressInfo, JobCoin, Obligation, Transaction}
 import org.scalatest.{MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.Map
-
 class ObligationSplitServiceSpec extends WordSpec with MustMatchers {
   private val HouseAccount = "meclador_house_account"
   private val BobDropBox = "bob_mec_box"

@@ -3,8 +3,8 @@ import model.{Address, Obligation, _}
 import org.scalatest.{MustMatchers, WordSpec}
 import service._
 
-import scala.concurrent.{Await, Promise}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Promise}
 
 class ObligationProducerTest extends WordSpec with MustMatchers {
   private val HouseAccount = "meclador_house_account"

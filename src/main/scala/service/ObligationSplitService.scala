@@ -4,8 +4,8 @@ import model.{Address, JobCoin, Obligation, PendingTransaction}
 
 import scala.util.Random
 
-class ObligationSplitService(registrarService: RegistrarService,
-                             houseAccountService: HouseAccountService,
+class ObligationSplitService(val registrarService: RegistrarService,
+                             val houseAccountService: HouseAccountService,
                              splitN: Int = 5) {
 
   if (splitN <= 0) throw InvalidPropertyError("splitN",
@@ -37,6 +37,7 @@ class ObligationSplitService(registrarService: RegistrarService,
 
   private def shuffleContinually(outBoxes: Iterable[Address]) =
     Iterator.continually(Random.shuffle(outBoxes)).flatten
+
 }
 
 object ObligationSplitService {

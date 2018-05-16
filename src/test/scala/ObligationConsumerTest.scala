@@ -4,7 +4,6 @@ import monix.execution.Cancelable
 import org.scalatest.{BeforeAndAfterAll, MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.Map
 import scala.concurrent.duration.FiniteDuration
 
 class ObligationConsumerTest extends WordSpec with MustMatchers with BeforeAndAfterAll {

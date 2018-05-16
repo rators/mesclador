@@ -8,8 +8,6 @@ import model.{AddressInfo, JobCoin, Transaction}
 import org.scalatest.{BeforeAndAfterAll, MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.Map
-
 class KafkaControllersTest extends WordSpec with MustMatchers with BeforeAndAfterAll {
   val kafkaServer = new KafkaServer()
 
