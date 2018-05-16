@@ -8,7 +8,7 @@ import model.{AddressInfo, JobCoin, Transaction}
 import org.scalatest.{BeforeAndAfterAll, MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.TrieMap
+import scala.collection.concurrent.Map
 
 class KafkaControllersTest extends WordSpec with MustMatchers with BeforeAndAfterAll {
   val kafkaServer = new KafkaServer()
@@ -31,7 +31,7 @@ class KafkaControllersTest extends WordSpec with MustMatchers with BeforeAndAfte
        |client.id="ObligationProducer"
     """.stripMargin)
 
-  val sampleRegistryService = new LocalRegistrarService(TrieMap.empty)
+  val sampleRegistryService = new LocalRegistrarService(Map.empty)
 
   val jobCoinApiDao: JobCoinApiDao = new LocalJobCoinApiDao(Map(
     "BobsAddress" -> AddressInfo(JobCoin(50), List(Transaction(currentTimeMillis.toString, None, "BobsAddress", JobCoin(50)))),

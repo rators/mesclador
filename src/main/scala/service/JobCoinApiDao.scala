@@ -1,7 +1,7 @@
 package service
 
-import com.twitter.finagle.{http, Http, Service}
 import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.{Http, Service, http}
 import com.twitter.util.Await
 import io.circe.generic.auto._
 import io.circe.parser.decode

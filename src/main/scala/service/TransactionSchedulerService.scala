@@ -3,12 +3,10 @@ package service
 import com.typesafe.scalalogging.StrictLogging
 import model.{PendingTransaction, SendJobCoinForm}
 import monix.execution.Cancelable
-
-import scala.concurrent.duration.FiniteDuration
 import monix.execution.Scheduler.{global => scheduler}
 
+import scala.concurrent.duration.{FiniteDuration, _}
 import scala.util.Random
-import scala.concurrent.duration._
 
 class TransactionSchedulerService(jobCoinApiDao: JobCoinApiDao) extends StrictLogging {
 

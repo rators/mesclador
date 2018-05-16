@@ -2,7 +2,7 @@ import model.{Address, AddressInfo, JobCoin, Obligation, Transaction}
 import org.scalatest.{MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.TrieMap
+import scala.collection.concurrent.Map
 
 class ObligationSplitServiceSpec extends WordSpec with MustMatchers {
   private val HouseAccount = "meclador_house_account"
@@ -13,7 +13,7 @@ class ObligationSplitServiceSpec extends WordSpec with MustMatchers {
   "the obligation split service" should {
     "split an obligation into n parts" in {
       val registrar: RegistrarService = new LocalRegistrarService(
-        TrieMap[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB))
+        Map[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB))
       )
 
       val initTransaction = Transaction("INIT_DATE", None, HouseAccount, JobCoin(10))

@@ -3,7 +3,6 @@ import com.typesafe.config.ConfigFactory
 import controller.{KafkaObligationConsumer, KafkaObligationProducer}
 import service._
 
-import scala.collection.concurrent.TrieMap
 import scala.io.StdIn
 
 object Main extends App {
@@ -24,7 +23,7 @@ object Main extends App {
       |pollRate=5
     """.stripMargin)
 
-  val sampleRegistryService = new LocalRegistrarService(TrieMap.empty)
+  val sampleRegistryService = new LocalRegistrarService(Map.empty)
 
   val jobCoinApiDao = new HttpJobCoinApiDao("jobcoin.projecticeland.net", 80, "unbountifulness")
 

@@ -1,9 +1,9 @@
 package controller
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, Props}
 import cakesolutions.kafka.KafkaConsumer
-import cakesolutions.kafka.akka.{ConsumerRecords, KafkaConsumerActor}
 import cakesolutions.kafka.akka.KafkaConsumerActor.{Confirm, Subscribe, Unsubscribe}
+import cakesolutions.kafka.akka.{ConsumerRecords, KafkaConsumerActor}
 import com.typesafe.config.Config
 import model.{Obligation, _}
 import monix.execution.Cancelable

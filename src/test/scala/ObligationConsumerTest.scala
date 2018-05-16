@@ -4,7 +4,7 @@ import monix.execution.Cancelable
 import org.scalatest.{BeforeAndAfterAll, MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.TrieMap
+import scala.collection.concurrent.Map
 import scala.concurrent.duration.FiniteDuration
 
 class ObligationConsumerTest extends WordSpec with MustMatchers with BeforeAndAfterAll {
@@ -14,7 +14,7 @@ class ObligationConsumerTest extends WordSpec with MustMatchers with BeforeAndAf
   private val BobBoxB = "bob_acc_b"
 
   private val registrar: RegistrarService = new LocalRegistrarService(
-    TrieMap[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB))
+    Map[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB))
   )
 
   private val initTransaction = Transaction("INIT_DATE", None, HouseAccount, JobCoin(10))

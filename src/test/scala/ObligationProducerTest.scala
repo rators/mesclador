@@ -3,7 +3,6 @@ import model.{Address, Obligation, _}
 import org.scalatest.{MustMatchers, WordSpec}
 import service._
 
-import scala.collection.concurrent.TrieMap
 import scala.concurrent.{Await, Promise}
 import scala.concurrent.duration._
 
@@ -68,8 +67,7 @@ class ObligationProducerTest extends WordSpec with MustMatchers {
       val houseService = new SimpleHouseAccountService(jobCoinApi, HouseAccount)
 
       val registrar: RegistrarService = new LocalRegistrarService(
-        TrieMap[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB))
-      )
+        Map[Address, Set[Address]](BobDropBox -> Set(BobBoxA, BobBoxB)))
 
       val obligationPromise = Promise[Obligation]()
 
